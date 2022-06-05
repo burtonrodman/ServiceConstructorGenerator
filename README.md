@@ -9,6 +9,7 @@ This reduces the amount of boiler-plate code needed when using constructor injec
 2. Add a using for `burtonrodman.FieldInjectionGenerator` to the top of your C# file.
 3. Add a `[GenerateFieldInjectionConstructor]` attribute to your class.
 4. Add the `partial` keyword on your class.
+5. Optionally, add an `[InjectAsOptions]` attribute on any field that should be wrapped with IOptions.
 
 In this example, the following constructor will be generated:
 
