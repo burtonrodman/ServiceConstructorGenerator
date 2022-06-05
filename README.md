@@ -51,6 +51,11 @@ namespace MyApp
 
 # Future Plans
 - support C# 11 required properties.
+- support customizing the InjectAsOptions feature using C# 11 attribute generics and expressions
+
+  `ex: [InjectAs<IOptions>(options => options.Value)]`
+
+  `ex: [InjectAs<MyWrapper>(wrapper => wrapper.Object)]`
 
 # Contributing
 I welcome Pull Requests for any improvement or bug fixes.  Please open an Issue for discussion if you plan on adding any features, so that we can collaborate on design.
