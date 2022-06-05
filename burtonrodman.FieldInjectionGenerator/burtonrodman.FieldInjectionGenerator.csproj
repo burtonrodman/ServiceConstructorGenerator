@@ -9,8 +9,6 @@
         <PackageProjectUrl>https://github.com/burtonrodman/FieldInjectionGenerator</PackageProjectUrl>
         <!-- <PackageReadmeFile>README.md</PackageReadmeFile> -->
 
-        <!-- don't pack to the lib folder, just analyzers (see below)-->
-        <IncludeBuildOutput>false</IncludeBuildOutput>
     </PropertyGroup>
 
 	<ItemGroup>
