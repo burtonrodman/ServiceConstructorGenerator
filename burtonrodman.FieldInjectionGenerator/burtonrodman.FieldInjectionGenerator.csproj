@@ -3,8 +3,9 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
-        <Version>0.1.0</Version>
-	</PropertyGroup>
+        <Version>0.1.1</Version>
+	    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.2.0" />
