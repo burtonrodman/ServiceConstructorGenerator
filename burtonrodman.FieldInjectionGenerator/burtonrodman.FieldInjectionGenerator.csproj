@@ -3,12 +3,11 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
-        <Version>0.1.8</Version>
+        <Version>0.1.9</Version>
 	    <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Authors>Burton Rodman</Authors>
         <PackageProjectUrl>https://github.com/burtonrodman/FieldInjectionGenerator</PackageProjectUrl>
-        <!-- <PackageReadmeFile>README.md</PackageReadmeFile> -->
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
 	<ItemGroup>
@@ -22,6 +21,6 @@
     <ItemGroup>
         <!-- pack to the analyzers folder -->
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <!-- <None Include="README.md" Pack="true" PackagePath="\" /> -->
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 </Project>
