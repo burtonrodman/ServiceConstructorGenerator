@@ -15,12 +15,8 @@ jobs:
         with:
           dotnet-version: 6.0.300
 
-      - name: publish on version change
-        id: publish_nuget
-        uses: brandedoutcast/publish-nuget@v2
-        with:
-          # Filepath of the project to be packaged, relative to root of repository
-          PROJECT_FILE_PATH: burtonrodman.FieldInjectionGenerator/burtonrodman.FieldInjectionGenerator.csproj
+      - name: Pack
+        run: dotnet pack burtonrodman.FieldInjectionGenerator/burtonrodman.FieldInjectionGenerator.csproj -c Release
 
-          # API key to authenticate with NuGet server
-          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+      - name: Publish NuGet Package
+        run: dotnet nuget push /home/runner/work/FieldInjectionGenerator/FieldInjectionGenerator/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
