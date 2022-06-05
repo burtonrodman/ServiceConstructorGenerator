@@ -42,4 +42,5 @@ namespace ConsoleApp1
 
     public interface IFoo3 { }
     public class Foo3 : IFoo3 { }
+    
 }
