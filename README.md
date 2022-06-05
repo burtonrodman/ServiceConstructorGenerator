@@ -22,6 +22,8 @@ namespace MyApp
     {
         private readonly IHttpContextAccessor _accessor;
         private readonly IWidgetRepository _widgetRepository;
+        [InjectAsOptions]
+        private readonly EmailSenderOptions _emailSenderOptions;
     }
 }
 ```
@@ -35,10 +37,12 @@ namespace MyApp
     {
         public Test(
             IHttpContextAccessor _accessor,
-            IWidgetRepository _widgetRepository
+            IWidgetRepository _widgetRepository,
+            Microsoft.Extensions.Options.IOptions<EmailSenderOptions> _emailSenderOptions
         ) {
             this._accessor = _accessor;
             this._widgetRepository = _widgetRepository;
+            this._emailSenderOptions = _emailSenderOptions.Value;
         }
     }
 }
