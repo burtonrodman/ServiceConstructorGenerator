@@ -9,7 +9,6 @@
         <PackageProjectUrl>https://github.com/burtonrodman/FieldInjectionGenerator</PackageProjectUrl>
         <!-- <PackageReadmeFile>README.md</PackageReadmeFile> -->
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <IncludeBuildOutput>false</IncludeBuildOutput>
     </PropertyGroup>
 
 	<ItemGroup>
