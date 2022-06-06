@@ -36,7 +36,13 @@ namespace burtonrodman.FieldInjectionGenerator
                         }
                         catch (Exception ex)
                         {
-                            context.AddSource($"{classDeclaration.Identifier.Text}.g.cs", ex.ToString());
+                            // context.AddSource($"{classDeclaration.Identifier.Text}.g.cs", ex.ToString());
+
+                            var descriptor = new DiagnosticDescriptor(
+                                "SCG001", "An error occurred generating a constructor for your service.",
+                                "{0}", "Source Generation", DiagnosticSeverity.Error, true);
+                            
+                            context.ReportDiagnostic(Diagnostic.Create(descriptor, classDeclaration.GetLocation(), ex.ToString()));
                         }
                     }
                 }
