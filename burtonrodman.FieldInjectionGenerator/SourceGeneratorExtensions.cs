@@ -23,18 +23,13 @@ namespace burtonrodman.FieldInjectionGenerator
             var namespaceDeclaration = tree.GetRoot().DescendantNodes()
                 .OfType<BaseNamespaceDeclarationSyntax>()
                 .FirstOrDefault();
-            if (namespaceDeclaration is null)
+
+            return namespaceDeclaration.Name switch
             {
-                throw new InvalidOperationException("The namespace declaration was not found.");
-            }
-            if (namespaceDeclaration.Name is IdentifierNameSyntax name)
-            {
-                return name.Identifier.Text;
-            }
-            else
-            {
-                throw new InvalidOperationException($"The namespace's identifier was not the expected type.  It was type {namespaceDeclaration.Name.GetType().Name}.");
-            }
+                IdentifierNameSyntax id => id.Identifier.Text,
+                QualifiedNameSyntax fq => fq.GetText().ToString(),
+                _ => throw new InvalidOperationException($"The namespace's identifier was not the expected type.  It was type {namespaceDeclaration.Name.GetType().Name}.")
+            };
         }
 
         public static string GetTypeName(this FieldDeclarationSyntax field)

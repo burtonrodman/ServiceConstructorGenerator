@@ -14,7 +14,7 @@ namespace burtonrodman.FieldInjectionGenerator
         public void Execute(GeneratorExecutionContext context)
         {
             // if (!Debugger.IsAttached) Debugger.Launch();
-            
+
             var attributeHasBeenGenerated = false;
 
             foreach (var tree in context.Compilation.SyntaxTrees)
@@ -41,7 +41,7 @@ namespace burtonrodman.FieldInjectionGenerator
                             var descriptor = new DiagnosticDescriptor(
                                 "SCG001", "An error occurred generating a constructor for your service.",
                                 "{0}", "Source Generation", DiagnosticSeverity.Error, true);
-                            
+
                             context.ReportDiagnostic(Diagnostic.Create(descriptor, classDeclaration.GetLocation(), ex.ToString()));
                         }
                     }

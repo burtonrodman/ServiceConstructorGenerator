@@ -1,5 +1,4 @@
-﻿using burtonrodman.FieldInjectionGenerator;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
 namespace ConsoleApp1
 {
@@ -13,23 +12,12 @@ namespace ConsoleApp1
             var foo3 = new Foo3();
             var options = new Options<EmailSenderOptions>(new EmailSenderOptions());
             var hello = new HelloFrom(foo2, foo3, options);
-            var foo = new Test(hello, foo2, 5, foo3, foo3);
+            var foo = new ConsoleApp1.TestNamespace.Foo.Test(hello, foo2, 5, foo3, foo3);
 
         }
 
         static partial void HelloFrom(string name);
     }
-
-    [GenerateFieldInjectionConstructor]
-    public partial class Test
-    {
-        private readonly IHelloFrom _foo;
-        private readonly IFoo2 _foo2;
-        private readonly int _blah;
-        private readonly IFoo3 _foo3;
-        private readonly IFoo3 _foo4;
-    }
-
     public interface IHelloFrom
     {
     }
