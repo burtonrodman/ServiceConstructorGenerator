@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -19,10 +20,21 @@ namespace burtonrodman.FieldInjectionGenerator
 
         public static string GetContainingNamespace(this SyntaxTree tree)
         {
-            var namespaceSyntax = tree.GetRoot().DescendantNodes()
+            var namespaceDeclaration = tree.GetRoot().DescendantNodes()
                 .OfType<BaseNamespaceDeclarationSyntax>()
-                .FirstOrDefault().Name as IdentifierNameSyntax;
-            return namespaceSyntax.Identifier.Text;
+                .FirstOrDefault();
+            if (namespaceDeclaration is null)
+            {
+                throw new InvalidOperationException("The namespace declaration was not found.");
+            }
+            if (namespaceDeclaration.Name is IdentifierNameSyntax name)
+            {
+                return name.Identifier.Text;
+            }
+            else
+            {
+                throw new InvalidOperationException($"The namespace's identifier was not the expected type.  It was type {namespaceDeclaration.Name.GetType().Name}.");
+            }
         }
 
         public static string GetTypeName(this FieldDeclarationSyntax field)
@@ -91,7 +103,7 @@ namespace {containingNamespace}
 ";
         }
 
-        
+
         public static void GenerateAttributeCode(this GeneratorExecutionContext context)
         {
             string source =
