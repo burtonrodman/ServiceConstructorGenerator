@@ -20,7 +20,7 @@ namespace burtonrodman.FieldInjectionGenerator
         public static string GetContainingNamespace(this SyntaxTree tree)
         {
             var namespaceSyntax = tree.GetRoot().DescendantNodes()
-                .OfType<NamespaceDeclarationSyntax>()
+                .OfType<BaseNamespaceDeclarationSyntax>()
                 .FirstOrDefault().Name as IdentifierNameSyntax;
             return namespaceSyntax.Identifier.Text;
         }
