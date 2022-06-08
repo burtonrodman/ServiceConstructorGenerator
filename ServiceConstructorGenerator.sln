@@ -5,7 +5,9 @@ VisualStudioVersion = 17.3.32519.111
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{E2172331-11CA-4481-AB13-5B15ED769A83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "burtonrodman.FieldInjectionGenerator", "burtonrodman.FieldInjectionGenerator\burtonrodman.FieldInjectionGenerator.csproj", "{013B0766-AC57-4249-A799-FF8D1E558129}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceConstructorGenerator", "ServiceConstructorGenerator\ServiceConstructorGenerator.csproj", "{013B0766-AC57-4249-A799-FF8D1E558129}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceConstructorGenerator.Tests", "ServiceConstructorGenerator.Tests\ServiceConstructorGenerator.Tests.csproj", "{732A08AF-FDE7-43AF-9104-C175082B6DD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{013B0766-AC57-4249-A799-FF8D1E558129}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{013B0766-AC57-4249-A799-FF8D1E558129}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{013B0766-AC57-4249-A799-FF8D1E558129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{732A08AF-FDE7-43AF-9104-C175082B6DD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{732A08AF-FDE7-43AF-9104-C175082B6DD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{732A08AF-FDE7-43AF-9104-C175082B6DD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{732A08AF-FDE7-43AF-9104-C175082B6DD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

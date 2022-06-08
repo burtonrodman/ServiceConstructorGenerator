@@ -5,11 +5,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace burtonrodman.FieldInjectionGenerator
+namespace burtonrodman
 {
     public static class SourceGeneratorExtensions
     {
-        public const string ConstructorAttributeName = "GenerateFieldInjectionConstructor";
+        public const string ConstructorAttributeName = "GenerateServiceConstructor";
         public const string InjectAsOptionsAttributeName = "InjectAsOptions";
 
         public static bool ShouldGenerateConstructor(this ClassDeclarationSyntax classDeclaration)
@@ -18,12 +18,21 @@ namespace burtonrodman.FieldInjectionGenerator
             return attr?.Name is IdentifierNameSyntax name && name.Identifier.Text == ConstructorAttributeName;
         }
 
-        public static string GetContainingNamespace(this SyntaxTree tree)
+        public static IList<string> GetAllUsingStatements(this ClassDeclarationSyntax classDeclaration)
         {
-            var namespaceDeclaration = tree.GetRoot().DescendantNodes()
-                .OfType<BaseNamespaceDeclarationSyntax>()
-                .FirstOrDefault();
+            var root = classDeclaration.GetCompilationUnitSyntax();
+            return root.Usings.Select(u => u.ToString()).ToList();
+        }
 
+        public static CompilationUnitSyntax GetCompilationUnitSyntax(this SyntaxNode node)
+        {
+            if (node.Parent is CompilationUnitSyntax) return node.Parent as CompilationUnitSyntax;
+            return node.Parent.GetCompilationUnitSyntax();
+        }
+
+        public static string GetContainingNamespace(this ClassDeclarationSyntax classDeclaration)
+        {
+            var namespaceDeclaration = classDeclaration.Parent as BaseNamespaceDeclarationSyntax;
             return namespaceDeclaration.Name switch
             {
                 IdentifierNameSyntax id => id.Identifier.Text,
@@ -78,13 +87,16 @@ namespace burtonrodman.FieldInjectionGenerator
 
         public static string GenerateFieldInjectionConstructor(
             this ClassDeclarationSyntax classDeclaration,
-            string containingNamespace
+            GeneratorExecutionContext context
         )
         {
+            var usings = classDeclaration.GetAllUsingStatements();
             var (constructorParams, constructorAssignments) = classDeclaration.GetConstructorParameters();
-            return $@"// Auto-generated code
+            return $@"
+// Auto-generated code
 using System;
-namespace {containingNamespace}
+{string.Join("\r\n", usings)}
+namespace {classDeclaration.GetContainingNamespace()}
 {{
     public partial class {classDeclaration.Identifier.Text}
     {{
@@ -98,17 +110,15 @@ namespace {containingNamespace}
 ";
         }
 
-
-        public static void GenerateAttributeCode(this GeneratorExecutionContext context)
-        {
-            string source =
+        public const string AttributesSourceFileName = "ServiceConstructorGeneratorAttributes.g.cs";
+        public const string AttributesSourceCode =
 $@"
 using System;
 
-namespace burtonrodman.FieldInjectionGenerator
+namespace burtonrodman.ServiceConstructorGenerator
 {{
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class GenerateFieldInjectionConstructorAttribute : Attribute
+    public class GenerateServiceConstructorAttribute : Attribute
     {{
     }}
 
@@ -118,7 +128,10 @@ namespace burtonrodman.FieldInjectionGenerator
     }}
 }}
 ";
-            context.AddSource("FieldInjectionGeneratorAttributes.g.cs", source);
+
+        public static void GenerateAttributeCode(this GeneratorExecutionContext context)
+        {
+            context.AddSource(AttributesSourceFileName, AttributesSourceCode);
         }
 
     }

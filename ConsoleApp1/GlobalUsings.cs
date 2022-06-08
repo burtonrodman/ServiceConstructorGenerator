@@ -1,2 +1,2 @@
-﻿global using burtonrodman.FieldInjectionGenerator;
+﻿global using burtonrodman.ServiceConstructorGenerator;
 

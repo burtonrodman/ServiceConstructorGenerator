@@ -16,7 +16,7 @@ jobs:
           dotnet-version: 6.0.300
 
       - name: Pack
-        run: dotnet pack burtonrodman.FieldInjectionGenerator/burtonrodman.FieldInjectionGenerator.csproj -c Release
+        run: dotnet pack ServiceConstructorGenerator/ServiceConstructorGenerator.csproj -c Release
 
       - name: Publish NuGet Package
-        run: dotnet nuget push /home/runner/work/FieldInjectionGenerator/FieldInjectionGenerator/burtonrodman.FieldInjectionGenerator/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push /home/runner/work/ServiceConstructorGenerator/ServiceConstructorGenerator/ServiceConstructorGenerator/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate

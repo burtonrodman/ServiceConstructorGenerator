@@ -1,24 +1,24 @@
-# FieldInjectionGenerator
+# ServiceConstructorGenerator
 A C# Source Generator that generates a constructor to initialize all readonly fields.
 
 This reduces the amount of boiler-plate code needed when using constructor injection in ASP.Net Core projects for example.  However, this can be used with any C# project and does NOT require ASP.Net Core, or even a Dependency Injection system.
 
 # Getting Started
 
-1. Add the ```burtonrodman.FieldInjectionGenerator``` NuGet package to your project.
-2. Add a using for `burtonrodman.FieldInjectionGenerator` to the top of your C# file.
-3. Add a `[GenerateFieldInjectionConstructor]` attribute to your class.
+1. Add the ```burtonrodman.ServiceConstructorGenerator``` NuGet package to your project.
+2. Add a using for `burtonrodman.ServiceConstructorGenerator` to the top of your C# file.
+3. Add a `[GenerateServiceConstructor]` attribute to your class.
 4. Add the `partial` keyword on your class.
 5. Optionally, add an `[InjectAsOptions]` attribute on any field that should be wrapped with IOptions.
 
 In this example, the following constructor will be generated:
 
 ```
-using burtonrodman.FieldInjectionGenerator;
+using burtonrodman.ServiceConstructorGenerator;
 
 namespace MyApp
 {
-    [GenerateFieldInjectionConstructor]
+    [GenerateServiceConstructor]
     public partial class Test
     {
         private readonly IHttpContextAccessor _accessor;
