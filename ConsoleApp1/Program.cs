@@ -21,7 +21,7 @@ namespace ConsoleApp1
     {
     }
 
-    //[GenerateFieldInjectionConstructor]
+    //[GenerateServiceConstructor]
     public partial class HelloFrom : IHelloFrom
     {
         private readonly IFoo2 _foo2;

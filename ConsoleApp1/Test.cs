@@ -2,7 +2,7 @@
 namespace ConsoleApp1.TestNamespace.Foo
 {
 
-    //[GenerateFieldInjectionConstructor]
+    //[GenerateServiceConstructor]
     public partial class Test
     {
         private readonly IHelloFrom _foo;

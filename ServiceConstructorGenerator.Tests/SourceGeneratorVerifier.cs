@@ -9,10 +9,6 @@ public static class SourceGeneratorVerifier<TSourceGenerator>
 {
     public class Test : CSharpSourceGeneratorTest<TSourceGenerator, XUnitVerifier>
     {
-        // public Test()
-        // {
-        // }
-
         protected override CompilationOptions CreateCompilationOptions()
         {
             var compilationOptions = base.CreateCompilationOptions();
