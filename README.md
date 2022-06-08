@@ -49,13 +49,9 @@ namespace MyApp
 }
 ```
 
-# Future Plans
-- support C# 11 required properties.
-- support customizing the InjectAsOptions feature using C# 11 attribute generics and expressions
-
-  `ex: [InjectAs<IOptions>(options => options.Value)]`
-
-  `ex: [InjectAs<MyWrapper>(wrapper => wrapper.Object)]`
+# Troubleshooting
+- PROBLEM:  You receive type conversion errors after deleting an existing constructor and converting your code to use this generator .
+    - SOLUTION: Check that your fields are defined in the same order as your old constructor's parameters were.  The constructor parameters are generated from fields in their source order.
 
 # Contributing
 I welcome Pull Requests for any improvement or bug fixes.  Please open an Issue for discussion if you plan on adding any features, so that we can collaborate on design.
