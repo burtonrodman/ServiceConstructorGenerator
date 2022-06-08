@@ -51,7 +51,7 @@ namespace MyApp
 
 # Troubleshooting
 - PROBLEM:  You receive type conversion errors after deleting an existing constructor and converting your code to use this generator .
-    - SOLUTION: Check that your fields are defined in the same order as your old constructor's parameters were.  The constructor parameters are generated from fields in their source order.
+    - SOLUTION:  The constructor parameters are generated from fields in their source order.  Check that your fields are defined in the same order as your old constructor's parameters were, or update the code constructing the object to pass parameters in the new order.
 
 # Contributing
 I welcome Pull Requests for any improvement or bug fixes.  Please open an Issue for discussion if you plan on adding any features, so that we can collaborate on design.
