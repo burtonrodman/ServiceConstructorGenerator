@@ -8,7 +8,11 @@
 	    <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Authors>Burton Rodman</Authors>
         <PackageProjectUrl>https://github.com/burtonrodman/ServiceConstructorGenerator</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/burtonrodman/ServiceConstructorGenerator</RepositoryUrl>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
 	<ItemGroup>
