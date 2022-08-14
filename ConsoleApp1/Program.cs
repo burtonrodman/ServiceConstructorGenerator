@@ -11,7 +11,7 @@ namespace ConsoleApp1
             var foo2 = new Foo2();
             var foo3 = new Foo3();
             var options = new Options<EmailSenderOptions>(new EmailSenderOptions());
-            var hello = new HelloFrom(foo2, foo3, options);
+            var hello = new HelloFromClass(foo2, foo3, options);
             var foo = new ConsoleApp1.TestNamespace.Foo.Test(hello, foo2, 5, foo3, foo3);
         }
 
@@ -19,13 +19,13 @@ namespace ConsoleApp1
     }
     public interface IHelloFrom
     {
-    }
+    } 
 
-    //[GenerateServiceConstructor]
-    public partial class HelloFrom : IHelloFrom
+    [GenerateServiceConstructor]
+    public partial class HelloFromClass : IHelloFrom
     {
-        private readonly IFoo2 _foo2;
-        private readonly IFoo3 _foo3;
+        private readonly IFoo2 _foo4;
+        private readonly IFoo3 _foo5;
         [InjectAsOptions]
         private readonly EmailSenderOptions _emailSenderOptions;
     }

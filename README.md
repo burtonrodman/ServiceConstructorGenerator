@@ -6,7 +6,7 @@ This reduces the amount of boiler-plate code needed when using constructor injec
 # Getting Started
 
 1. Add the ```burtonrodman.ServiceConstructorGenerator``` NuGet package to your project.
-2. Add a using for `burtonrodman.ServiceConstructorGenerator` to the top of your C# file.
+2. Add a using for `burtonrodman.ServiceConstructorGenerator` to the top of your C# file or as a `global using`.
 3. Add a `[GenerateServiceConstructor]` attribute to your class.
 4. Add the `partial` keyword on your class.
 5. Ensure all fields that should be injected are using the `readonly` keyword.

@@ -2,7 +2,7 @@
 namespace ConsoleApp1.TestNamespace.Foo
 {
 
-    //[GenerateServiceConstructor]
+    [GenerateServiceConstructor]
     public partial class Test
     {
         private readonly IHelloFrom _foo;
@@ -11,5 +11,4 @@ namespace ConsoleApp1.TestNamespace.Foo
         private readonly IFoo3 _foo3;
         private readonly IFoo3 _foo4;
     }
-
 }

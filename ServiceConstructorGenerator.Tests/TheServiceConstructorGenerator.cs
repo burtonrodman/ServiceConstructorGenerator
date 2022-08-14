@@ -27,13 +27,14 @@ namespace ServiceConstructorGeneratorTests
                 },
             };
             verifier.TestState.GeneratedSources.Add(
-                (typeof(ServiceConstructorGenerator), SourceGeneratorExtensions.AttributesSourceFileName, 
+                (typeof(ServiceConstructorGenerator), SourceGeneratorExtensions.AttributesSourceFileName,
                     SourceText.From(SourceGeneratorExtensions.AttributesSourceCode, Encoding.UTF8, SourceHashAlgorithm.Sha1))
             );
-            foreach (var source in generated) {
+            foreach (var source in generated)
+            {
                 verifier.TestState.GeneratedSources.Add(source);
             }
-            
+
             await verifier.RunAsync();
         }
 
@@ -51,7 +52,7 @@ public partial class Foo
 }
 ",
 
-CreateGeneratedSource("Foo.g.cs", @"
+CreateGeneratedSource("ConsoleApp28.Foo.g.cs", @"
 // Auto-generated code
 using System;
 using burtonrodman.ServiceConstructorGenerator;
@@ -62,7 +63,7 @@ namespace ConsoleApp28
         public Foo(
             int _bar
         ) {
-this._bar = _bar;
+            this._bar = _bar;
         }
     }
 }
@@ -86,19 +87,18 @@ namespace ConsoleApp28.Baz
 }
 ",
 
-CreateGeneratedSource("Foo.g.cs", @"
+CreateGeneratedSource("ConsoleApp28.Baz.Foo.g.cs", @"
 // Auto-generated code
 using System;
 using burtonrodman.ServiceConstructorGenerator;
 namespace ConsoleApp28.Baz
-
 {
     public partial class Foo
     {
         public Foo(
             int _bar
         ) {
-this._bar = _bar;
+            this._bar = _bar;
         }
     }
 }
@@ -123,19 +123,18 @@ namespace ConsoleApp28.Baz
 }
 ",
 
-CreateGeneratedSource("Foo.g.cs", @"
+CreateGeneratedSource("ConsoleApp28.Baz.Foo.g.cs", @"
 // Auto-generated code
 using System;
 using burtonrodman.ServiceConstructorGenerator;
 namespace ConsoleApp28.Baz
-
 {
     public partial class Foo
     {
         public Foo(
             Microsoft.Extensions.Options.IOptions<string> _bar
         ) {
-this._bar = _bar.Value;
+            this._bar = _bar.Value;
         }
     }
 }
@@ -166,20 +165,19 @@ namespace ConsoleApp28.Baz
 }
 ",
 
-CreateGeneratedSource("Foo.g.cs", @"
+CreateGeneratedSource("ConsoleApp28.Baz.Foo.g.cs", @"
 // Auto-generated code
 using System;
 using burtonrodman.ServiceConstructorGenerator;
 using ConsoleApp28.Services;
 namespace ConsoleApp28.Baz
-
 {
     public partial class Foo
     {
         public Foo(
             ITestService _bar
         ) {
-this._bar = _bar;
+            this._bar = _bar;
         }
     }
 }

@@ -4,7 +4,7 @@
         <AssemblyName>burtonrodman.ServiceConstructorGenerator</AssemblyName>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
-        <Version>0.1.15</Version>
+        <Version>0.1.16</Version>
 	    <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Authors>Burton Rodman</Authors>
         <PackageProjectUrl>https://github.com/burtonrodman/ServiceConstructorGenerator</PackageProjectUrl>
@@ -13,6 +13,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Nullable>enable</Nullable>
     </PropertyGroup>
 
 	<ItemGroup>

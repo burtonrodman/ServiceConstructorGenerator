@@ -20,25 +20,35 @@ namespace burtonrodman
 
         public static IList<string> GetAllUsingStatements(this ClassDeclarationSyntax classDeclaration)
         {
-            var root = classDeclaration.GetCompilationUnitSyntax();
-            return root.Usings.Select(u => u.ToString()).ToList();
+            if (classDeclaration.GetCompilationUnitSyntax() is CompilationUnitSyntax root)
+            {
+                return root.Usings.Select(u => u.ToString()).ToList();
+            }
+            return new List<string>();
         }
 
-        public static CompilationUnitSyntax GetCompilationUnitSyntax(this SyntaxNode node)
+        public static CompilationUnitSyntax? GetCompilationUnitSyntax(this SyntaxNode node)
         {
-            if (node.Parent is CompilationUnitSyntax) return node.Parent as CompilationUnitSyntax;
-            return node.Parent.GetCompilationUnitSyntax();
+            if (node.Parent is CompilationUnitSyntax parent) return parent;
+
+            if (node.Parent is SyntaxNode parentSyntax)
+                return node.Parent.GetCompilationUnitSyntax();
+
+            return null;
         }
 
         public static string GetContainingNamespace(this ClassDeclarationSyntax classDeclaration)
         {
-            var namespaceDeclaration = classDeclaration.Parent as BaseNamespaceDeclarationSyntax;
-            return namespaceDeclaration.Name switch
+            if (classDeclaration.Parent is BaseNamespaceDeclarationSyntax namespaceDeclaration)
             {
-                IdentifierNameSyntax id => id.Identifier.Text,
-                QualifiedNameSyntax fq => fq.GetText().ToString(),
-                _ => throw new InvalidOperationException($"The namespace's identifier was not the expected type.  It was type {namespaceDeclaration.Name.GetType().Name}.")
-            };
+                return (namespaceDeclaration.Name switch
+                {
+                    IdentifierNameSyntax id => id.Identifier.Text,
+                    QualifiedNameSyntax fq => fq.GetText().ToString(),
+                    _ => throw new InvalidOperationException($"The namespace's identifier was not the expected type.  It was type {namespaceDeclaration.Name.GetType().Name}.")
+                }).Trim();
+            }
+            throw new InvalidOperationException("could not determine containing namespace");
         }
 
         public static string GetTypeName(this FieldDeclarationSyntax field)
@@ -46,7 +56,7 @@ namespace burtonrodman
             {
                 IdentifierNameSyntax id => id.Identifier.Text,
                 PredefinedTypeSyntax pd => pd.Keyword.Text,
-                _ => "UNKNOWN"
+                _ => field.Declaration.Type.ToString()
             };
 
         public static string GetVariableName(this FieldDeclarationSyntax field)
@@ -85,7 +95,7 @@ namespace burtonrodman
                 .Any(a => a.Name is IdentifierNameSyntax name && name.Identifier.Text == InjectAsOptionsAttributeName);
         }
 
-        public static string GenerateFieldInjectionConstructor(
+        public static string GenerateServiceConstructor(
             this ClassDeclarationSyntax classDeclaration,
             GeneratorExecutionContext context
         )
@@ -101,9 +111,9 @@ namespace {classDeclaration.GetContainingNamespace()}
     public partial class {classDeclaration.Identifier.Text}
     {{
         public {classDeclaration.Identifier.Text}(
-            {string.Join(", ", constructorParams)}
+            {string.Join(", \n\t\t\t\t\t\t", constructorParams)}
         ) {{
-{string.Join("\r\n", constructorAssignments)}
+            {string.Join("\r\n\t\t\t\t\t\t", constructorAssignments)}
         }}
     }}
 }}
