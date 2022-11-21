@@ -8,29 +8,28 @@ public class InjectAsOptionsTests
     {
         await VerifySourceGenerator(
             """
-            using burtonrodman.ServiceConstructorGenerator;
             namespace ConsoleApp28.Baz
             {
                 [GenerateServiceConstructor]
                 public partial class Foo
                 {
                     [InjectAsOptions]
-                    public readonly string _bar;
+                    public readonly ITestService _bar;
                 }
             }
             """,
 
             CreateGeneratedSource("ConsoleApp28.Baz.Foo.g.cs",
             """
-            // Auto-generated code
             using System;
-            using burtonrodman.ServiceConstructorGenerator;
+            
             namespace ConsoleApp28.Baz
             {
                 public partial class Foo
                 {
+                    [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
-                        Microsoft.Extensions.Options.IOptions<string> _bar
+                        Microsoft.Extensions.Options.IOptions<ITestService> _bar
                     ) {
                         this._bar = _bar.Value;
                     }

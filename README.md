@@ -35,7 +35,6 @@ namespace MyApp
 
 Generated Code:
 ```
-// Auto-generated code.
 namespace MyApp
 {
     public partial class Test
@@ -55,9 +54,9 @@ namespace MyApp
 
 # Troubleshooting
 - PROBLEM:  You receive type conversion errors after deleting an existing constructor and converting your code to use this generator.
-    - SOLUTION:  The constructor parameters are generated from fields in their source order.  Check that your fields are defined in the same order as your old constructor's parameters were, or update the code constructing the object to pass parameters in the new order.
+    - SOLUTION:  The constructor parameters are generated from fields and properties in their source order.  Check that your fields are defined in the same order as your old constructor's parameters were, or update the code constructing the object to pass parameters in the new order.
 
 # Contributing
-I welcome Pull Requests for any improvement or bug fixes.  Please open an Issue for discussion if you plan on adding any features, so that we can collaborate on design.
+I welcome Pull Requests for any improvement or bug fixes.  Please open an Issue for discussion if you plan on adding any features, so that we can collaborate on design.  For bug reports, a Pull Request with a failing unit test is ideal.
 
 Thanks!

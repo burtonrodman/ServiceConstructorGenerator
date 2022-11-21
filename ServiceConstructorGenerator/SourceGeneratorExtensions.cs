@@ -74,7 +74,8 @@ public static class SourceGeneratorExtensions
         var constructorAssignments = new List<string>();
 
         var readonlyFields = classDeclaration.DescendantNodes().OfType<FieldDeclarationSyntax>()
-            .Where(f => f.Modifiers.Any(m => m.IsKind(SyntaxKind.ReadOnlyKeyword)))
+            .Where(f => f.Modifiers.Any(m => m.IsKind(SyntaxKind.ReadOnlyKeyword) ||
+                        f.Modifiers.Any(m => m.IsKind(SyntaxKind.RequiredKeyword))))
             .Select(f => new ParameterInfo() { 
                 TypeName = f.GetTypeName(), 
                 MemberName = f.GetVariableName(), 
@@ -123,13 +124,13 @@ public static class SourceGeneratorExtensions
         var usings = classDeclaration.GetAllUsingStatements();
         var (constructorParams, constructorAssignments) = classDeclaration.GetConstructorParameters();
         return $$$"""
-               // Auto-generated code
                using System;
                {{{string.Join("\r\n", usings)}}}
                namespace {{{classDeclaration.GetContainingNamespace()}}}
                {
                    public partial class {{{classDeclaration.Identifier.Text}}}
                    {
+                       [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                        public {{{classDeclaration.Identifier.Text}}}(
                            {{{string.Join(",\r\n            ", constructorParams)}}}
                        ) {

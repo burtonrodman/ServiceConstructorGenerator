@@ -1,19 +1,18 @@
-namespace ServiceConstructorGeneratorTests;
+﻿namespace ServiceConstructorGeneratorTests;
 
-public class TheServiceConstructorGenerator
+public class RequiredMemberTests
 {
 
     [Fact]
-    public async void DetectsSimpleInputNamespaceFileScoped()
+    public async Task GeneratesParametersForRequiredFields()
     {
         await VerifySourceGenerator(
             """
             namespace ConsoleApp28;
-
             [GenerateServiceConstructor]
             public partial class Foo
             {
-                public readonly ITestService _bar;
+                public required ITestService _bar;
             }
             """,
 
@@ -38,33 +37,32 @@ public class TheServiceConstructorGenerator
     }
 
     [Fact]
-    public async void DetectsQualifiedInputNamespaceBlock()
+    public async Task GeneratesParametersForRequiredProperties()
     {
         await VerifySourceGenerator(
             """
-            namespace ConsoleApp28.Baz
+            namespace ConsoleApp28;
+
+            [GenerateServiceConstructor]
+            public partial class Foo
             {
-                [GenerateServiceConstructor]
-                public partial class Foo
-                {
-                    public readonly ITestService _bar;
-                }
+                public required ITestService Bar { private get; init; }
             }
             """,
 
-            CreateGeneratedSource("ConsoleApp28.Baz.Foo.g.cs",
+            CreateGeneratedSource("ConsoleApp28.Foo.g.cs",
             """
             using System;
 
-            namespace ConsoleApp28.Baz
+            namespace ConsoleApp28
             {
                 public partial class Foo
                 {
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
-                        ITestService _bar
+                        ITestService Bar
                     ) {
-                        this._bar = _bar;
+                        this.Bar = Bar;
                     }
                 }
             }
@@ -73,33 +71,40 @@ public class TheServiceConstructorGenerator
     }
 
     [Fact]
-    public async void QualifiesFieldTypes()
+    public async Task GeneratesParametersInSourceOrder()
     {
         await VerifySourceGenerator(
             """
-            namespace ConsoleApp28.Baz
+            namespace ConsoleApp28;
+            [GenerateServiceConstructor]
+            public partial class Foo
             {
-                [GenerateServiceConstructor]
-                public partial class Foo
-                {
-                    public readonly ITestService _bar;
-                }
+                public required ITestService Zzz { private get; init; }
+                public readonly ITestService Yyy;
+                public required ITestService Xxx { private get; init; }
+                public required ITestService Www;
             }
             """,
 
-            CreateGeneratedSource("ConsoleApp28.Baz.Foo.g.cs",
+            CreateGeneratedSource("ConsoleApp28.Foo.g.cs",
             """
             using System;
 
-            namespace ConsoleApp28.Baz
+            namespace ConsoleApp28
             {
                 public partial class Foo
                 {
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
-                        ITestService _bar
+                        ITestService Zzz,
+                        ITestService Yyy,
+                        ITestService Xxx,
+                        ITestService Www
                     ) {
-                        this._bar = _bar;
+                        this.Zzz = Zzz;
+                        this.Yyy = Yyy;
+                        this.Xxx = Xxx;
+                        this.Www = Www;
                     }
                 }
             }

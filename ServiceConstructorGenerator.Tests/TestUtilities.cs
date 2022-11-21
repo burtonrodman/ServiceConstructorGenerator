@@ -49,6 +49,18 @@ internal static class TestUtilities
                         public const string RefStructs = nameof(RefStructs);
                         public const string RequiredMembers = nameof(RequiredMembers);
                     }
+                    """,
+                    """
+                    namespace System.Diagnostics.CodeAnalysis;
+                    internal sealed class SetsRequiredMembersAttribute : Attribute { }
+                    """,
+                    """
+                    global using burtonrodman.ServiceConstructorGenerator;
+                    global using ConsoleApp28.Services;
+                    """,
+                    """
+                    namespace ConsoleApp28.Services;
+                    public interface ITestService { }
                     """
                 }
             },
