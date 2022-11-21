@@ -4,7 +4,7 @@ public class InjectAsOptionsTests
 {
 
     [Fact]
-    public async void WrapsInjectAsOptionsField()
+    public async void WrapsInjectAsOptionsFieldOrProperty()
     {
         await VerifySourceGenerator(
             """
@@ -15,6 +15,9 @@ public class InjectAsOptionsTests
                 {
                     [InjectAsOptions]
                     public readonly ITestService _bar;
+
+                    [InjectAsOptions]
+                    public required ITestService OtherTestService { private get; init; }
                 }
             }
             """,
@@ -29,14 +32,55 @@ public class InjectAsOptionsTests
                 {
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
-                        Microsoft.Extensions.Options.IOptions<ITestService> _bar
+                        Microsoft.Extensions.Options.IOptions<ITestService> _bar,
+                        Microsoft.Extensions.Options.IOptions<ITestService> OtherTestService
                     ) {
                         this._bar = _bar.Value;
+                        this.OtherTestService = OtherTestService.Value;
                     }
                 }
             }
             """)
         );
     }
+
+    // [Fact]
+    // public async void WrapsInjectAsFieldOrProperty()
+    // {
+    //     await VerifySourceGenerator(
+    //         """
+    //         namespace ConsoleApp28.Baz;
+
+    //         public interface IFooWrapper
+    //         {
+    //             public ITestService Object { get; }
+    //         }
+    //         [GenerateServiceConstructor]
+    //         public partial class Foo
+    //         {
+    //             [InjectAs<IFooWrapper>(getter: nameof(IFooWrapper.Object))]
+    //             public required ITestService OtherTestService { private get; init; }
+    //         }
+    //         """,
+
+    //         CreateGeneratedSource("ConsoleApp28.Baz.Foo.g.cs",
+    //         """
+    //         using System;
+            
+    //         namespace ConsoleApp28.Baz
+    //         {
+    //             public partial class Foo
+    //             {
+    //                 [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
+    //                 public Foo(
+    //                     IFooWrapper OtherTestService
+    //                 ) {
+    //                     this.OtherTestService = OtherTestService.Object;
+    //                 }
+    //             }
+    //         }
+    //         """)
+    //     );
+    // }
 
 }

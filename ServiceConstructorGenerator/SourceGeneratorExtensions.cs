@@ -10,7 +10,7 @@ namespace burtonrodman;
 public static class SourceGeneratorExtensions
 {
     public const string ConstructorAttributeName = "GenerateServiceConstructor";
-    public const string InjectAsOptionsAttributeName = "InjectAsOptions";
+    private static readonly string[] InjectAsAttributeNames = { "InjectAs", "InjectAsOptions" };
 
     public static bool ShouldGenerateConstructor(this ClassDeclarationSyntax classDeclaration)
     {
@@ -70,8 +70,6 @@ public static class SourceGeneratorExtensions
     public static (List<string> constructorParams, List<string> constructorAssignments)
         GetConstructorParameters(this ClassDeclarationSyntax classDeclaration)
     {
-        var constructorParams = new List<string>();
-        var constructorAssignments = new List<string>();
 
         var readonlyFields = classDeclaration.DescendantNodes().OfType<FieldDeclarationSyntax>()
             .Where(f => f.Modifiers.Any(m => m.IsKind(SyntaxKind.ReadOnlyKeyword) ||
@@ -79,7 +77,7 @@ public static class SourceGeneratorExtensions
             .Select(f => new ParameterInfo() { 
                 TypeName = f.GetTypeName(), 
                 MemberName = f.GetVariableName(), 
-                ShouldInjectAsOptions = f.ShouldInjectAsOptions(),
+                InjectAs = f.GetInjectAs(f.GetTypeName(), f.GetVariableName()),
                 DeclarationStartingLine = f.Span.Start
             });
 
@@ -88,33 +86,44 @@ public static class SourceGeneratorExtensions
             .Select(p => new ParameterInfo() { 
                 TypeName = p.GetTypeName(), 
                 MemberName = p.GetPropertyName(), 
-                ShouldInjectAsOptions = p.ShouldInjectAsOptions(),
+                InjectAs = p.GetInjectAs(p.GetTypeName(), p.GetPropertyName()),
                 DeclarationStartingLine = p.Span.Start
             });
 
+        var constructorParams = new List<string>();
+        var constructorAssignments = new List<string>();
         foreach (var info in readonlyFields.Union(requiredProperties).OrderBy(m => m.DeclarationStartingLine))
         {
-            if (info.ShouldInjectAsOptions)
-            {
-                constructorParams.Add($"Microsoft.Extensions.Options.IOptions<{info.TypeName}> {info.MemberName}");
-                constructorAssignments.Add($"this.{info.MemberName} = {info.MemberName}.Value;");
-            }
-            else
-            {
-                constructorParams.Add($"{info.TypeName} {info.MemberName}");
-                constructorAssignments.Add($"this.{info.MemberName} = {info.MemberName};");
-            }
+            constructorParams.Add($"{info.InjectAs.TypeName} {info.MemberName}");
+            constructorAssignments.Add($"this.{info.MemberName} = {info.InjectAs.InitExpression};");
         }
 
         return (constructorParams, constructorAssignments);
     }
 
-    public static bool ShouldInjectAsOptions(this FieldDeclarationSyntax field) => field.AttributeLists.ShouldInjectAsOptions();
-    public static bool ShouldInjectAsOptions(this PropertyDeclarationSyntax prop) => prop.AttributeLists.ShouldInjectAsOptions();
+    public static (string TypeName, string InitExpression) GetInjectAs(this FieldDeclarationSyntax field, string typeName, string memberName) => field.AttributeLists.GetInjectAs(typeName, memberName);
+    public static (string TypeName, string InitExpression) GetInjectAs(this PropertyDeclarationSyntax prop, string typeName, string memberName) => prop.AttributeLists.GetInjectAs(typeName, memberName);
 
-    public static bool ShouldInjectAsOptions(this SyntaxList<AttributeListSyntax> lists)
-        => lists.SelectMany(l => l.Attributes)
-            .Any(a => a.Name is IdentifierNameSyntax name && name.Identifier.Text == InjectAsOptionsAttributeName);
+    public static (string TypeName, string InitExpression) GetInjectAs(this SyntaxList<AttributeListSyntax> lists, string typeName, string memberName)
+    {
+        var attr = lists.SelectMany(l => l.Attributes)
+            .FirstOrDefault(a => a.Name is IdentifierNameSyntax name && InjectAsAttributeNames.Contains(name.Identifier.Text));
+        if (attr is not null)
+        {
+            //       [InjectAs<IFooWrapper>(getter: nameof(IFooWrapper.Object))]
+
+            var attrName = ((IdentifierNameSyntax)attr.Name).Identifier.Text;
+            return attrName switch {
+                "InjectAsOptions" => ($"Microsoft.Extensions.Options.IOptions<{typeName}>", $"{memberName}.Value"),
+                "InjectAs" => ("foo", "bar"),
+                _ => throw new NotSupportedException()
+            };
+        }
+        else
+        {
+            return (typeName, memberName);
+        }
+    }
 
     public static string GenerateServiceConstructor(
         this ClassDeclarationSyntax classDeclaration,
@@ -143,7 +152,7 @@ public static class SourceGeneratorExtensions
 
     public const string AttributesSourceFileName = "ServiceConstructorGeneratorAttributes.g.cs";
     public const string AttributesSourceCode =
-        $$$"""
+        """
         using System;
 
         namespace burtonrodman.ServiceConstructorGenerator
@@ -151,7 +160,7 @@ public static class SourceGeneratorExtensions
             [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
             public class GenerateServiceConstructorAttribute : Attribute { }
 
-            [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+            [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
             public class InjectAsOptionsAttribute : Attribute { }
         }
         """;
