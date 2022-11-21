@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using System.Text;
-using verifycs = SourceGeneratorVerifier<burtonrodman.ServiceConstructorGenerator>;
+using Verifier = SourceGeneratorVerifier<burtonrodman.ServiceConstructorGenerator>;
 
 namespace ServiceConstructorGeneratorTests;
 
@@ -14,7 +14,7 @@ internal static class TestUtilities
 
     public static async Task VerifySourceGenerator(string code, params (Type, string, SourceText)[] generated)
     {
-        var verifier = new verifycs.Test()
+        var verifier = new Verifier.Test()
         {
             TestState =
             {
