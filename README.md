@@ -12,7 +12,7 @@ Constructor Parameters are generated in source order.
 3. Add a `[GenerateServiceConstructor]` attribute to your class.
 4. Add the `partial` keyword on your class.
 5. Ensure all fields that should be injected are using the `readonly` keyword.
-6. Ensure all properties that should be injected are using the `required` keyword (suggestion, scope the property as `public` with a `private get;` and `init;`.).
+6. Ensure all properties that should be injected are using the `required` keyword (suggestion, scope the property as `public` with a `private get;` or `init;`.).
 6. Optionally, add an `[InjectAsOptions]` attribute on any field/property that should be wrapped with IOptions.
 
 In this example, the following constructor will be generated:
