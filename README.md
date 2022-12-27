@@ -44,9 +44,9 @@ namespace MyApp
             IWidgetRepository WidgetRepository,
             Microsoft.Extensions.Options.IOptions<EmailSenderOptions> _emailSenderOptions
         ) {
-            this._accessor = _accessor;
-            this.WidgetRepository = WidgetRepository;
-            this._emailSenderOptions = _emailSenderOptions.Value;
+            this._accessor = _accessor ?? throw new ArgumentNullException(nameof(_accessor));
+            this.WidgetRepository = WidgetRepository ?? throw new ArgumentNullException(nameof(WidgetRepository));
+            this._emailSenderOptions = _emailSenderOptions.Value ?? throw new ArgumentNullException(nameof(_emailSenderOptions));
         }
     }
 }
