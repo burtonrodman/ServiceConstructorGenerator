@@ -4,7 +4,7 @@ public partial class TheServiceConstructorGenerator
 {
 
     [Fact]
-    public async void AddsParameterNullChecks()
+    public async void AddsOnAfterInitialized()
     {
         await VerifySourceGenerator(
             """
@@ -14,6 +14,15 @@ public partial class TheServiceConstructorGenerator
             public partial class Foo
             {
                 public readonly ITestService _bar;
+
+                partial void OnAfterInitialized()
+                {
+                    Test();
+                }
+
+                private void Test()
+                {
+                }
             }
             """,
 

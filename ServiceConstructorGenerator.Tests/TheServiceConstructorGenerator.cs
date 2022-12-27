@@ -25,11 +25,15 @@ public partial class TheServiceConstructorGenerator
             {
                 public partial class Foo
                 {
+                    partial void OnAfterInitialized();
+
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
                         ITestService _bar
                     ) {
                         this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
+
+                        OnAfterInitialized();
                     }
                 }
             }
@@ -60,11 +64,15 @@ public partial class TheServiceConstructorGenerator
             {
                 public partial class Foo
                 {
+                    partial void OnAfterInitialized();
+
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
                         ITestService _bar
                     ) {
                         this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
+
+                        OnAfterInitialized();
                     }
                 }
             }
@@ -95,11 +103,15 @@ public partial class TheServiceConstructorGenerator
             {
                 public partial class Foo
                 {
+                    partial void OnAfterInitialized();
+
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
                         ITestService _bar
                     ) {
                         this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
+
+                        OnAfterInitialized();
                     }
                 }
             }

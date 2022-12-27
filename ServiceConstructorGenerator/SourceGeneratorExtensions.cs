@@ -139,11 +139,15 @@ public static class SourceGeneratorExtensions
                {
                    public partial class {{{classDeclaration.Identifier.Text}}}
                    {
+                       partial void OnAfterInitialized();
+
                        [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                        public {{{classDeclaration.Identifier.Text}}}(
                            {{{string.Join(",\r\n            ", constructorParams)}}}
                        ) {
                            {{{string.Join("\r\n            ", constructorAssignments)}}}
+
+                           OnAfterInitialized();
                        }
                    }
                }

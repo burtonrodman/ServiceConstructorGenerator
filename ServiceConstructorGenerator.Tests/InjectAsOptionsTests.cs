@@ -30,6 +30,8 @@ public class InjectAsOptionsTests
             {
                 public partial class Foo
                 {
+                    partial void OnAfterInitialized();
+
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
                         Microsoft.Extensions.Options.IOptions<ITestService> _bar,
@@ -37,6 +39,8 @@ public class InjectAsOptionsTests
                     ) {
                         this._bar = _bar.Value ?? throw new ArgumentNullException(nameof(_bar));
                         this.OtherTestService = OtherTestService.Value ?? throw new ArgumentNullException(nameof(OtherTestService));
+
+                        OnAfterInitialized();
                     }
                 }
             }

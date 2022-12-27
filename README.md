@@ -29,6 +29,11 @@ namespace MyApp
         public required IWidgetRepository WidgetRepository { private get; init; };
         [InjectAsOptions]
         private readonly EmailSenderOptions _emailSenderOptions;
+
+        partial void OnAfterInitialized()
+        {
+            // add your logic here
+        }
     }
 }
 ```
@@ -39,6 +44,8 @@ namespace MyApp
 {
     public partial class Test
     {
+        partial void OnAfterInitialized();
+        
         public Test(
             IHttpContextAccessor _accessor,
             IWidgetRepository WidgetRepository,
@@ -47,6 +54,8 @@ namespace MyApp
             this._accessor = _accessor ?? throw new ArgumentNullException(nameof(_accessor));
             this.WidgetRepository = WidgetRepository ?? throw new ArgumentNullException(nameof(WidgetRepository));
             this._emailSenderOptions = _emailSenderOptions.Value ?? throw new ArgumentNullException(nameof(_emailSenderOptions));
+
+            OnAfterInitialized();
         }
     }
 }

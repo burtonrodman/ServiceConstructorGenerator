@@ -24,11 +24,15 @@ public class RequiredMemberTests
             {
                 public partial class Foo
                 {
+                    partial void OnAfterInitialized();
+
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
                         ITestService _bar
                     ) {
                         this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
+
+                        OnAfterInitialized();
                     }
                 }
             }
@@ -58,11 +62,15 @@ public class RequiredMemberTests
             {
                 public partial class Foo
                 {
+                    partial void OnAfterInitialized();
+
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
                         ITestService Bar
                     ) {
                         this.Bar = Bar ?? throw new ArgumentNullException(nameof(Bar));
+
+                        OnAfterInitialized();
                     }
                 }
             }
@@ -94,6 +102,8 @@ public class RequiredMemberTests
             {
                 public partial class Foo
                 {
+                    partial void OnAfterInitialized();
+
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
                         ITestService Zzz,
@@ -105,6 +115,8 @@ public class RequiredMemberTests
                         this.Yyy = Yyy ?? throw new ArgumentNullException(nameof(Yyy));
                         this.Xxx = Xxx ?? throw new ArgumentNullException(nameof(Xxx));
                         this.Www = Www ?? throw new ArgumentNullException(nameof(Www));
+
+                        OnAfterInitialized();
                     }
                 }
             }
