@@ -67,7 +67,7 @@ public static class SourceGeneratorExtensions
     public static string GetPropertyName(this PropertyDeclarationSyntax prop)
         => (prop.Identifier.Text);
 
-    public static (List<string> constructorParams, List<string> constructorAssignments)
+    public static (List<string> constructorParams, List<string> constructorAssignments, string? baseConstructorCall)
         GetConstructorParameters(this ClassDeclarationSyntax classDeclaration)
     {
 
@@ -98,7 +98,18 @@ public static class SourceGeneratorExtensions
             constructorAssignments.Add($"this.{info.MemberName} = {info.InjectAs.InitExpression} ?? throw new ArgumentNullException(nameof({info.MemberName}));");
         }
 
-        return (constructorParams, constructorAssignments);
+        // initally, just blindly take the values from the attribute and pass them along
+        // TODO: FUTURE get base class semantic model and figure out the right constructor and parameters
+        string? baseConstructorCall = null;
+        var attr = classDeclaration.DescendantNodes().OfType<AttributeSyntax>().FirstOrDefault();
+        if (attr?.Name is IdentifierNameSyntax name && name.Identifier.Text == ConstructorAttributeName)
+        {
+            // get the parameter list
+            var arguments = attr.ArgumentList?.Arguments.ToString();
+            baseConstructorCall = arguments is null ? null : $" : base({arguments})";
+        }
+
+        return (constructorParams, constructorAssignments, baseConstructorCall);
     }
 
     public static (string TypeName, string InitExpression) GetInjectAs(this FieldDeclarationSyntax field, string typeName, string memberName) => field.AttributeLists.GetInjectAs(typeName, memberName);
@@ -131,7 +142,7 @@ public static class SourceGeneratorExtensions
     )
     {
         var usings = classDeclaration.GetAllUsingStatements();
-        var (constructorParams, constructorAssignments) = classDeclaration.GetConstructorParameters();
+        var (constructorParams, constructorAssignments, baseConstructorCall) = classDeclaration.GetConstructorParameters();
         return $$$"""
                using System;
                {{{string.Join("\r\n", usings)}}}
@@ -144,7 +155,7 @@ public static class SourceGeneratorExtensions
                        [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                        public {{{classDeclaration.Identifier.Text}}}(
                            {{{string.Join(",\r\n            ", constructorParams)}}}
-                       ) {
+                       ){{{baseConstructorCall ?? ""}}} {
                            {{{string.Join("\r\n            ", constructorAssignments)}}}
 
                            OnAfterInitialized();
@@ -162,7 +173,14 @@ public static class SourceGeneratorExtensions
         namespace burtonrodman.ServiceConstructorGenerator
         {
             [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-            public class GenerateServiceConstructorAttribute : Attribute { }
+            public class GenerateServiceConstructorAttribute : Attribute
+            {
+                private readonly object[] _additionalBaseConstructorParameters;
+                public GenerateServiceConstructorAttribute(params object[] additionalBaseConstructorParameters)
+                {
+                    _additionalBaseConstructorParameters = additionalBaseConstructorParameters;
+                }
+            }
 
             [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
             public class InjectAsOptionsAttribute : Attribute { }

@@ -13,27 +13,31 @@ Constructor Parameters are generated in source order.
 4. Add the `partial` keyword on your class.
 5. Ensure all fields that should be injected are using the `readonly` keyword.
 6. Ensure all properties that should be injected are using the `required` keyword (suggestion, scope the property as `public` with a `private get;` or `init;`.).
-6. Optionally, add an `[InjectAsOptions]` attribute on any field/property that should be wrapped with IOptions.
+7. Optionally, add an `[InjectAsOptions]` attribute on any field/property that should be wrapped with IOptions.
+8. Optionally, implement `partial void OnAfterInitialized()` in your class.
 
 In this example, the following constructor will be generated:
 
 ```
-using burtonrodman.ServiceConstructorGenerator;
+/// Usings.cs
+global using burtonrodman.ServiceConstructorGenerator;
 
-namespace MyApp
+```
+
+```
+namespace MyApp;
+
+[GenerateServiceConstructor]
+public partial class Test
 {
-    [GenerateServiceConstructor]
-    public partial class Test
-    {
-        private readonly IHttpContextAccessor _accessor;
-        public required IWidgetRepository WidgetRepository { private get; init; };
-        [InjectAsOptions]
-        private readonly EmailSenderOptions _emailSenderOptions;
+    private readonly IHttpContextAccessor _accessor;
+    public required IWidgetRepository WidgetRepository { private get; init; };
+    [InjectAsOptions]
+    private readonly EmailSenderOptions _emailSenderOptions;
 
-        partial void OnAfterInitialized()
-        {
-            // add your logic here
-        }
+    partial void OnAfterInitialized()
+    {
+        // add your logic here
     }
 }
 ```
@@ -60,6 +64,29 @@ namespace MyApp
     }
 }
 ```
+
+Base class parameters may be passed along by providing them in the `GenerateServiceConstructor` attribute:
+```
+[GenerateServiceConstructor("register", "Register stuff")]
+public partial class Test : Command
+{
+    ...
+}
+```
+
+Generated code:
+```
+public partial class Test
+{
+    public Test(
+        ...
+    ) : base("register", "Register stuff") {
+        ...
+    }
+}
+```
+
+This is currently implemented as a verbatim copy of the attribute's parameter list -- no parsing or type-checking occurs.
 
 # Troubleshooting
 - PROBLEM:  You receive type conversion errors after deleting an existing constructor and converting your code to use this generator.
