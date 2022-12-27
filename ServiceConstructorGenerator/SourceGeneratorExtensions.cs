@@ -95,7 +95,7 @@ public static class SourceGeneratorExtensions
         foreach (var info in readonlyFields.Union(requiredProperties).OrderBy(m => m.DeclarationStartingLine))
         {
             constructorParams.Add($"{info.InjectAs.TypeName} {info.MemberName}");
-            constructorAssignments.Add($"this.{info.MemberName} = {info.InjectAs.InitExpression};");
+            constructorAssignments.Add($"this.{info.MemberName} = {info.InjectAs.InitExpression} ?? throw new ArgumentNullException(nameof({info.MemberName}));");
         }
 
         return (constructorParams, constructorAssignments);

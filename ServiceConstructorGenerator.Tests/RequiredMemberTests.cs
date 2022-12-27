@@ -28,7 +28,7 @@ public class RequiredMemberTests
                     public Foo(
                         ITestService _bar
                     ) {
-                        this._bar = _bar;
+                        this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
                     }
                 }
             }
@@ -62,7 +62,7 @@ public class RequiredMemberTests
                     public Foo(
                         ITestService Bar
                     ) {
-                        this.Bar = Bar;
+                        this.Bar = Bar ?? throw new ArgumentNullException(nameof(Bar));
                     }
                 }
             }
@@ -101,10 +101,10 @@ public class RequiredMemberTests
                         ITestService Xxx,
                         ITestService Www
                     ) {
-                        this.Zzz = Zzz;
-                        this.Yyy = Yyy;
-                        this.Xxx = Xxx;
-                        this.Www = Www;
+                        this.Zzz = Zzz ?? throw new ArgumentNullException(nameof(Zzz));
+                        this.Yyy = Yyy ?? throw new ArgumentNullException(nameof(Yyy));
+                        this.Xxx = Xxx ?? throw new ArgumentNullException(nameof(Xxx));
+                        this.Www = Www ?? throw new ArgumentNullException(nameof(Www));
                     }
                 }
             }

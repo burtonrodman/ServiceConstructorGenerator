@@ -1,6 +1,6 @@
 namespace ServiceConstructorGeneratorTests;
 
-public class TheServiceConstructorGenerator
+public partial class TheServiceConstructorGenerator
 {
 
     [Fact]
@@ -29,7 +29,7 @@ public class TheServiceConstructorGenerator
                     public Foo(
                         ITestService _bar
                     ) {
-                        this._bar = _bar;
+                        this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
                     }
                 }
             }
@@ -64,7 +64,7 @@ public class TheServiceConstructorGenerator
                     public Foo(
                         ITestService _bar
                     ) {
-                        this._bar = _bar;
+                        this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
                     }
                 }
             }
@@ -99,7 +99,7 @@ public class TheServiceConstructorGenerator
                     public Foo(
                         ITestService _bar
                     ) {
-                        this._bar = _bar;
+                        this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
                     }
                 }
             }

@@ -35,8 +35,8 @@ public class InjectAsOptionsTests
                         Microsoft.Extensions.Options.IOptions<ITestService> _bar,
                         Microsoft.Extensions.Options.IOptions<ITestService> OtherTestService
                     ) {
-                        this._bar = _bar.Value;
-                        this.OtherTestService = OtherTestService.Value;
+                        this._bar = _bar.Value ?? throw new ArgumentNullException(nameof(_bar));
+                        this.OtherTestService = OtherTestService.Value ?? throw new ArgumentNullException(nameof(OtherTestService));
                     }
                 }
             }

@@ -12,7 +12,8 @@ namespace ConsoleApp1
             var foo3 = new Foo3();
             var options = new Options<EmailSenderOptions>(new EmailSenderOptions());
             var hello = new HelloFromClass(foo2, foo3, options);
-            var foo = new ConsoleApp1.TestNamespace.Foo.Test(hello, foo2, 5, foo3, foo3);
+            var blah = new Blah();
+            var foo = new ConsoleApp1.TestNamespace.Foo.Test(hello, foo2, blah, foo3, foo3);
         }
 
         static partial void HelloFrom(string name);
@@ -29,6 +30,9 @@ namespace ConsoleApp1
         [InjectAsOptions]
         private readonly EmailSenderOptions _emailSenderOptions;
     }
+
+    public interface IBlah { }
+    public class Blah : IBlah { }
 
     public interface IFoo2 { }
     public class Foo2 : IFoo2 { }
