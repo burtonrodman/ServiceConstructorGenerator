@@ -11,8 +11,10 @@ Constructor Parameters are generated in source order.
 2. Add a using for `burtonrodman.ServiceConstructorGenerator` to the top of your C# file or as a `global using`.
 3. Add a `[GenerateServiceConstructor]` attribute to your class.
 4. Add the `partial` keyword on your class.
-5. Ensure all fields that should be injected are using the `readonly` keyword.
-6. Ensure all properties that should be injected are using the `required` keyword (suggestion, scope the property as `public` with a `private get;` and `init;`.).
+5. Ensure all fields that should be injected are using the `readonly` or `required` keywords.
+6. Ensure all properties that should be injected are using the `required` keyword.
+    > Suggestion: scope the property as `public` with a `private get;` and `init;`:<br/>
+    >`public IWidgetRepository WidgetRepository { private get; init; }`
 7. Optionally, add an `[InjectAsOptions]` attribute on any field/property that should be wrapped with IOptions.
 8. Optionally, implement `partial void OnAfterInitialized()` in your class.
 
