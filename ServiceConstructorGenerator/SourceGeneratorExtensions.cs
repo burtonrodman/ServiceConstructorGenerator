@@ -14,8 +14,9 @@ public static class SourceGeneratorExtensions
 
     public static bool ShouldGenerateConstructor(this ClassDeclarationSyntax classDeclaration)
     {
-        var attr = classDeclaration.DescendantNodes().OfType<AttributeSyntax>().FirstOrDefault();
-        return attr?.Name is IdentifierNameSyntax name && name.Identifier.Text == ConstructorAttributeName;
+        return classDeclaration.DescendantNodes()
+            .OfType<AttributeSyntax>()
+            .Any(a => a?.Name is IdentifierNameSyntax name && name.Identifier.Text == ConstructorAttributeName);
     }
 
     public static IList<string> GetAllUsingStatements(this ClassDeclarationSyntax classDeclaration)

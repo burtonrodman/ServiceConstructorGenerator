@@ -12,7 +12,7 @@ Constructor Parameters are generated in source order.
 3. Add a `[GenerateServiceConstructor]` attribute to your class.
 4. Add the `partial` keyword on your class.
 5. Ensure all fields that should be injected are using the `readonly` keyword.
-6. Ensure all properties that should be injected are using the `required` keyword (suggestion, scope the property as `public` with a `private get;` or `init;`.).
+6. Ensure all properties that should be injected are using the `required` keyword (suggestion, scope the property as `public` with a `private get;` and `init;`.).
 7. Optionally, add an `[InjectAsOptions]` attribute on any field/property that should be wrapped with IOptions.
 8. Optionally, implement `partial void OnAfterInitialized()` in your class.
 
@@ -91,6 +91,18 @@ This is currently implemented as a verbatim copy of the attribute's parameter li
 # Troubleshooting
 - PROBLEM:  You receive type conversion errors after deleting an existing constructor and converting your code to use this generator.
     - SOLUTION:  The constructor parameters are generated from fields and properties in their source order.  Check that your fields are defined in the same order as your old constructor's parameters were, or update the code constructing the object to pass parameters in the new order.
+- PROBLEM:  You receive the compile error `The type or namespace name 'SetsRequiredMembersAttribute' does not exist in namespace 'System.Diagnostics.CodeAnalysis'`
+    - SOLUTION:  This will occur in projects using C# 10 or earlier.  Stub out the attribute in your project:
+```
+namespace System.Diagnostics.CodeAnalysis;
+
+// stub in for now since we're not on C# 11
+
+[AttributeUsage(AttributeTargets.Constructor, AllowMultiple = false)]
+public sealed class SetsRequiredMembersAttribute : Attribute
+{
+}
+```
 
 # Contributing
 I welcome Pull Requests for any improvement or bug fixes.  Please open an Issue for discussion if you plan on adding any features, so that we can collaborate on design.  For bug reports, a Pull Request with a failing unit test is ideal.
