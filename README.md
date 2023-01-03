@@ -1,5 +1,5 @@
 # ServiceConstructorGenerator
-A C# Source Generator that generates a constructor to initialize all readonly fields and/or required properties.
+A C# Source Generator that generates a constructor to initialize all readonly or required fields and/or required properties.
 
 This reduces the amount of boiler-plate code needed when using constructor injection in ASP.Net Core projects for example.  However, this can be used with any C# project and does NOT require ASP.Net Core, or even a Dependency Injection system.
 
@@ -93,8 +93,6 @@ This is currently implemented as a verbatim copy of the attribute's parameter li
     - SOLUTION:  The constructor parameters are generated from fields and properties in their source order.  Check that your fields are defined in the same order as your old constructor's parameters were, or update the code constructing the object to pass parameters in the new order.
 - PROBLEM:  You receive the compile error `The type or namespace name 'SetsRequiredMembersAttribute' does not exist in namespace 'System.Diagnostics.CodeAnalysis'`
     - SOLUTION:  This will occur in projects using C# 10 or earlier.  Stub out the attribute in your project:
-- PROBLEM:  Even when everything seems right, my constructor doesn't generate.  
-    - SOLUTION:  prior to version 0.1.28, the constructor would only generate if the [GenerateServiceConstructor] attribute was the first attribute on the class.  Update your NuGet reference to 0.1.28 or later.
 
 ```
 namespace System.Diagnostics.CodeAnalysis;
@@ -106,6 +104,10 @@ public sealed class SetsRequiredMembersAttribute : Attribute
 {
 }
 ```
+
+
+- PROBLEM:  Even when everything seems right, my constructor doesn't generate.  
+    - SOLUTION:  prior to version 0.1.28, the constructor would only generate if the [GenerateServiceConstructor] attribute was the first attribute on the class.  Update your NuGet reference to 0.1.28 or later.
 
 # Contributing
 I welcome Pull Requests for any improvement or bug fixes.  Please open an Issue for discussion if you plan on adding any features, so that we can collaborate on design.  For bug reports, a Pull Request with a failing unit test is ideal.
