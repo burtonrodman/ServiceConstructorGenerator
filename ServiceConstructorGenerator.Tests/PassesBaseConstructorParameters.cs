@@ -32,7 +32,6 @@ public partial class TheServiceConstructorGenerator
                 {
                     partial void OnAfterInitialized();
 
-                    [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
                         ITestService _bar
                     ) : base("register", "Register stuff") {

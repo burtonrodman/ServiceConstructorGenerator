@@ -68,18 +68,23 @@ public static class SourceGeneratorExtensions
     public static string GetPropertyName(this PropertyDeclarationSyntax prop)
         => (prop.Identifier.Text);
 
-    public static (List<string> constructorParams, List<string> constructorAssignments, string? baseConstructorCall)
+    public static (
+        List<string> constructorParams,
+        List<string> constructorAssignments,
+        string? baseConstructorCall,
+        bool hasRequiredMembers)
         GetConstructorParameters(this ClassDeclarationSyntax classDeclaration)
     {
 
-        var readonlyFields = classDeclaration.DescendantNodes().OfType<FieldDeclarationSyntax>()
+        var fields = classDeclaration.DescendantNodes().OfType<FieldDeclarationSyntax>()
             .Where(f => f.Modifiers.Any(m => m.IsKind(SyntaxKind.ReadOnlyKeyword) ||
                         f.Modifiers.Any(m => m.IsKind(SyntaxKind.RequiredKeyword))))
             .Select(f => new ParameterInfo() { 
                 TypeName = f.GetTypeName(), 
                 MemberName = f.GetVariableName(), 
                 InjectAs = f.GetInjectAs(f.GetTypeName(), f.GetVariableName()),
-                DeclarationStartingLine = f.Span.Start
+                DeclarationStartingLine = f.Span.Start,
+                IsRequired = f.Modifiers.Any(m => m.IsKind(SyntaxKind.RequiredKeyword))
             });
 
         var requiredProperties = classDeclaration.DescendantNodes().OfType<PropertyDeclarationSyntax>()
@@ -88,12 +93,13 @@ public static class SourceGeneratorExtensions
                 TypeName = p.GetTypeName(), 
                 MemberName = p.GetPropertyName(), 
                 InjectAs = p.GetInjectAs(p.GetTypeName(), p.GetPropertyName()),
-                DeclarationStartingLine = p.Span.Start
+                DeclarationStartingLine = p.Span.Start,
+                IsRequired = true
             });
 
         var constructorParams = new List<string>();
         var constructorAssignments = new List<string>();
-        foreach (var info in readonlyFields.Union(requiredProperties).OrderBy(m => m.DeclarationStartingLine))
+        foreach (var info in fields.Union(requiredProperties).OrderBy(m => m.DeclarationStartingLine))
         {
             constructorParams.Add($"{info.InjectAs.TypeName} {info.MemberName}");
             constructorAssignments.Add($"this.{info.MemberName} = {info.InjectAs.InitExpression} ?? throw new ArgumentNullException(nameof({info.MemberName}));");
@@ -110,7 +116,8 @@ public static class SourceGeneratorExtensions
             baseConstructorCall = arguments is null ? null : $" : base({arguments})";
         }
 
-        return (constructorParams, constructorAssignments, baseConstructorCall);
+        var hasRequiredMembers = requiredProperties.Any() || fields.Any(i => i.IsRequired);
+        return (constructorParams, constructorAssignments, baseConstructorCall, hasRequiredMembers);
     }
 
     public static (string TypeName, string InitExpression) GetInjectAs(this FieldDeclarationSyntax field, string typeName, string memberName) => field.AttributeLists.GetInjectAs(typeName, memberName);
@@ -143,7 +150,8 @@ public static class SourceGeneratorExtensions
     )
     {
         var usings = classDeclaration.GetAllUsingStatements();
-        var (constructorParams, constructorAssignments, baseConstructorCall) = classDeclaration.GetConstructorParameters();
+        var (constructorParams, constructorAssignments, baseConstructorCall, hasRequiredMembers) = classDeclaration.GetConstructorParameters();
+        string setsRequiredMembersAttribute = hasRequiredMembers ? "        [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]\r\n" : "";
         return $$$"""
                using System;
                {{{string.Join("\r\n", usings)}}}
@@ -153,8 +161,7 @@ public static class SourceGeneratorExtensions
                    {
                        partial void OnAfterInitialized();
 
-                       [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
-                       public {{{classDeclaration.Identifier.Text}}}(
+               {{{ setsRequiredMembersAttribute }}}        public {{{classDeclaration.Identifier.Text}}}(
                            {{{string.Join(",\r\n            ", constructorParams)}}}
                        ){{{baseConstructorCall ?? ""}}} {
                            {{{string.Join("\r\n            ", constructorAssignments)}}}

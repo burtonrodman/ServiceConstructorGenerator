@@ -31,7 +31,6 @@ public partial class TheServiceConstructorGenerator
                 {
                     partial void OnAfterInitialized();
 
-                    [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public WorksWithAController(
                         ITestService _bar
                     ) {
