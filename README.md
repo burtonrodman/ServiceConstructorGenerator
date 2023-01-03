@@ -27,10 +27,11 @@ global using burtonrodman.ServiceConstructorGenerator;
 ```
 
 ```
+/// TestService.cs
 namespace MyApp;
 
 [GenerateServiceConstructor]
-public partial class Test
+public partial class TestService
 {
     private readonly IHttpContextAccessor _accessor;
     public required IWidgetRepository WidgetRepository { private get; init; };
@@ -46,6 +47,7 @@ public partial class Test
 
 Generated Code:
 ```
+/// TestService.g.cs
 namespace MyApp
 {
     public partial class Test
