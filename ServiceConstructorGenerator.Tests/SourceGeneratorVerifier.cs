@@ -25,7 +25,7 @@ public static class SourceGeneratorVerifier<TSourceGenerator>
             return nullableWarnings;
         }
 
-        public LanguageVersion LanguageVersion { get; set; } = LanguageVersion.Default;
+        public LanguageVersion LanguageVersion { get; set; } = LanguageVersion.Preview;
         protected override ParseOptions CreateParseOptions()
         {
             return ((CSharpParseOptions)base.CreateParseOptions()).WithLanguageVersion(LanguageVersion);
