@@ -181,7 +181,7 @@ public static class SourceGeneratorExtensions
         namespace burtonrodman.ServiceConstructorGenerator
         {
             [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-            public class GenerateServiceConstructorAttribute : Attribute
+            internal class GenerateServiceConstructorAttribute : Attribute
             {
                 private readonly object[] _additionalBaseConstructorParameters;
                 public GenerateServiceConstructorAttribute(params object[] additionalBaseConstructorParameters)
@@ -191,7 +191,7 @@ public static class SourceGeneratorExtensions
             }
 
             [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
-            public class InjectAsOptionsAttribute : Attribute { }
+            internal class InjectAsOptionsAttribute : Attribute { }
         }
         """;
 
