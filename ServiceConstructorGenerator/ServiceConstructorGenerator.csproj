@@ -4,7 +4,7 @@
         <AssemblyName>burtonrodman.ServiceConstructorGenerator</AssemblyName>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <Version>0.1.32</Version>
+        <Version>0.1.33</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Authors>Burton Rodman</Authors>
         <PackageProjectUrl>https://github.com/burtonrodman/ServiceConstructorGenerator</PackageProjectUrl>
