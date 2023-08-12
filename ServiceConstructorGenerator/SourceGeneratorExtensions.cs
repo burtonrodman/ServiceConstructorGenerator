@@ -28,6 +28,11 @@ public static class SourceGeneratorExtensions
         return new List<string>();
     }
 
+    public static string GetTypeParameters(this ClassDeclarationSyntax classDeclaration)
+    {
+        return classDeclaration.TypeParameterList?.GetText().ToString().Trim() ?? "";
+    }
+
     public static CompilationUnitSyntax? GetCompilationUnitSyntax(this SyntaxNode node)
     {
         if (node.Parent is CompilationUnitSyntax parent) return parent;
@@ -152,12 +157,13 @@ public static class SourceGeneratorExtensions
         var usings = classDeclaration.GetAllUsingStatements();
         var (constructorParams, constructorAssignments, baseConstructorCall, hasRequiredMembers) = classDeclaration.GetConstructorParameters();
         string setsRequiredMembersAttribute = hasRequiredMembers ? "        [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]\r\n" : "";
+        var typeParamsList = classDeclaration.GetTypeParameters();
         return $$$"""
                using System;
                {{{string.Join("\r\n", usings)}}}
                namespace {{{classDeclaration.GetContainingNamespace()}}}
                {
-                   public partial class {{{classDeclaration.Identifier.Text}}}
+                   public partial class {{{classDeclaration.Identifier.Text}}}{{{typeParamsList}}}
                    {
                        partial void OnAfterInitialized();
 

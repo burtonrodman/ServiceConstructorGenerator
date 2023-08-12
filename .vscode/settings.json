@@ -2,5 +2,6 @@
     "cSpell.words": [
         "burtonrodman",
         "nupkg"
-    ]
+    ],
+    "dotnet.defaultSolution": "ServiceConstructorGenerator.sln"
 }
