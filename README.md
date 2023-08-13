@@ -14,7 +14,7 @@ Constructor Parameters are generated in source order.
 5. Ensure all fields that should be injected are using the `readonly` or `required` keywords.
 6. Ensure all properties that should be injected are using the `required` keyword.
     > Suggestion: scope the property as `public` with a `private get;` and `init;`:<br/>
-    >`public IWidgetRepository WidgetRepository { private get; init; }`
+    >`public required IWidgetRepository WidgetRepository { private get; init; }`
 7. Optionally, add an `[InjectAsOptions]` attribute on any field/property that should be wrapped with IOptions.
 8. Optionally, implement `partial void OnAfterInitialized()` in your class.
 
@@ -55,13 +55,13 @@ namespace MyApp
         partial void OnAfterInitialized();
         
         public Test(
-            IHttpContextAccessor _accessor,
-            IWidgetRepository WidgetRepository,
-            Microsoft.Extensions.Options.IOptions<EmailSenderOptions> _emailSenderOptions
+            IHttpContextAccessor accessor,
+            IWidgetRepository widgetRepository,
+            Microsoft.Extensions.Options.IOptions<EmailSenderOptions> emailSenderOptions
         ) {
-            this._accessor = _accessor ?? throw new ArgumentNullException(nameof(_accessor));
-            this.WidgetRepository = WidgetRepository ?? throw new ArgumentNullException(nameof(WidgetRepository));
-            this._emailSenderOptions = _emailSenderOptions.Value ?? throw new ArgumentNullException(nameof(_emailSenderOptions));
+            this._accessor = accessor ?? throw new ArgumentNullException(nameof(accessor));
+            this.WidgetRepository = widgetRepository ?? throw new ArgumentNullException(nameof(widgetRepository));
+            this._emailSenderOptions = emailSenderOptions.Value ?? throw new ArgumentNullException(nameof(emailSenderOptions));
 
             OnAfterInitialized();
         }
@@ -90,7 +90,7 @@ public partial class Test
 }
 ```
 
-This is currently implemented as a verbatim copy of the attribute's parameter list -- no parsing or type-checking occurs.
+>NOTE: This is currently implemented as a verbatim copy of the attribute's parameter list -- no parsing or type-checking occurs.
 
 # Troubleshooting
 - PROBLEM:  You receive type conversion errors after deleting an existing constructor and converting your code to use this generator.
