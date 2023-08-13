@@ -28,9 +28,9 @@ public class RequiredMemberTests
 
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
-                        ITestService _bar
+                        ITestService bar
                     ) {
-                        this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
+                        this._bar = bar ?? throw new ArgumentNullException(nameof(bar));
 
                         OnAfterInitialized();
                     }
@@ -66,9 +66,9 @@ public class RequiredMemberTests
 
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
-                        ITestService Bar
+                        ITestService bar
                     ) {
-                        this.Bar = Bar ?? throw new ArgumentNullException(nameof(Bar));
+                        this.Bar = bar ?? throw new ArgumentNullException(nameof(bar));
 
                         OnAfterInitialized();
                     }
@@ -106,15 +106,15 @@ public class RequiredMemberTests
 
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
-                        ITestService Zzz,
-                        ITestService Yyy,
-                        ITestService Xxx,
-                        ITestService Www
+                        ITestService zzz,
+                        ITestService yyy,
+                        ITestService xxx,
+                        ITestService www
                     ) {
-                        this.Zzz = Zzz ?? throw new ArgumentNullException(nameof(Zzz));
-                        this.Yyy = Yyy ?? throw new ArgumentNullException(nameof(Yyy));
-                        this.Xxx = Xxx ?? throw new ArgumentNullException(nameof(Xxx));
-                        this.Www = Www ?? throw new ArgumentNullException(nameof(Www));
+                        this.Zzz = zzz ?? throw new ArgumentNullException(nameof(zzz));
+                        this.Yyy = yyy ?? throw new ArgumentNullException(nameof(yyy));
+                        this.Xxx = xxx ?? throw new ArgumentNullException(nameof(xxx));
+                        this.Www = www ?? throw new ArgumentNullException(nameof(www));
 
                         OnAfterInitialized();
                     }

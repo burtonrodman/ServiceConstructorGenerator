@@ -33,9 +33,9 @@ public partial class TheServiceConstructorGenerator
                     partial void OnAfterInitialized();
 
                     public Foo(
-                        ITestService _bar
+                        ITestService bar
                     ) : base("register", "Register stuff") {
-                        this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
+                        this._bar = bar ?? throw new ArgumentNullException(nameof(bar));
 
                         OnAfterInitialized();
                     }

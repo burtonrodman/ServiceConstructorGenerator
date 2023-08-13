@@ -34,11 +34,11 @@ public class InjectAsOptionsTests
 
                     [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
                     public Foo(
-                        Microsoft.Extensions.Options.IOptions<ITestService> _bar,
-                        Microsoft.Extensions.Options.IOptions<ITestService> OtherTestService
+                        Microsoft.Extensions.Options.IOptions<ITestService> bar,
+                        Microsoft.Extensions.Options.IOptions<ITestService> otherTestService
                     ) {
-                        this._bar = _bar.Value ?? throw new ArgumentNullException(nameof(_bar));
-                        this.OtherTestService = OtherTestService.Value ?? throw new ArgumentNullException(nameof(OtherTestService));
+                        this._bar = bar.Value ?? throw new ArgumentNullException(nameof(bar));
+                        this.OtherTestService = otherTestService.Value ?? throw new ArgumentNullException(nameof(otherTestService));
 
                         OnAfterInitialized();
                     }

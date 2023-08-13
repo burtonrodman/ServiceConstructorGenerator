@@ -106,8 +106,8 @@ public static class SourceGeneratorExtensions
         var constructorAssignments = new List<string>();
         foreach (var info in fields.Union(requiredProperties).OrderBy(m => m.DeclarationStartingLine))
         {
-            constructorParams.Add($"{info.InjectAs.TypeName} {info.MemberName}");
-            constructorAssignments.Add($"this.{info.MemberName} = {info.InjectAs.InitExpression} ?? throw new ArgumentNullException(nameof({info.MemberName}));");
+            constructorParams.Add($"{info.InjectAs.TypeName} {info.MemberName!.ToParameterName()}");
+            constructorAssignments.Add($"this.{info.MemberName} = {info.InjectAs.InitExpression} ?? throw new ArgumentNullException(nameof({info.MemberName.ToParameterName()}));");
         }
 
         // initally, just blindly take the values from the attribute and pass them along
@@ -138,14 +138,14 @@ public static class SourceGeneratorExtensions
 
             var attrName = ((IdentifierNameSyntax)attr.Name).Identifier.Text;
             return attrName switch {
-                "InjectAsOptions" => ($"Microsoft.Extensions.Options.IOptions<{typeName}>", $"{memberName}.Value"),
+                "InjectAsOptions" => ($"Microsoft.Extensions.Options.IOptions<{typeName}>", $"{memberName.ToParameterName()}.Value"),
                 "InjectAs" => ("foo", "bar"),
                 _ => throw new NotSupportedException()
             };
         }
         else
         {
-            return (typeName, memberName);
+            return (typeName, memberName.ToParameterName());
         }
     }
 
@@ -206,4 +206,16 @@ public static class SourceGeneratorExtensions
         context.AddSource(AttributesSourceFileName, AttributesSourceCode);
     }
 
+    public static string ToParameterName(this string memberName)
+    {
+        if (memberName.StartsWith("_"))
+        {
+            memberName = memberName.Substring(1);
+        }
+        if (char.IsUpper(memberName[0]))
+        {
+            return $"{memberName.Substring(0, 1).ToLower()}{memberName.Substring(1)}";
+        }
+        return memberName;
+    }
 }

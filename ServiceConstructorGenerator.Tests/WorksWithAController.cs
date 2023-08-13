@@ -32,9 +32,9 @@ public partial class TheServiceConstructorGenerator
                     partial void OnAfterInitialized();
 
                     public WorksWithAController(
-                        ITestService _bar
+                        ITestService bar
                     ) {
-                        this._bar = _bar ?? throw new ArgumentNullException(nameof(_bar));
+                        this._bar = bar ?? throw new ArgumentNullException(nameof(bar));
 
                         OnAfterInitialized();
                     }
